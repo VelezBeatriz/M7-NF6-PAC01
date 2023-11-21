@@ -34,13 +34,15 @@ $error = 'Error de Connexión número (' . $bbdd->connect_errno . ') ' . $bbdd->
         $year = $data['movie_year'];
         $actor = $data['movie_actor'];
         $director = $data['movie_director'];
+        $release = $data['movie_release'];
+        $rating = $data['movie_rating'];
 
         $query = "INSERT INTO
         movie
             (movie_name, movie_year, movie_type, movie_leadactor,
-            movie_director)
+            movie_director,movie_release, movie_rating)
         VALUES
-            ('$name', '$year', $type, $actor,  $director )";
+            ('$name', '$year', $type, $actor,  $director, '$release', '$rating' )";
         
         executeQuery($query);
 
@@ -70,6 +72,8 @@ $error = 'Error de Connexión número (' . $bbdd->connect_errno . ') ' . $bbdd->
         $year = $data['movie_year'];
         $actor = $data['movie_actor'];
         $director = $data['movie_director'];
+        $release = $data['movie_release'];
+        $rating = $data['movie_rating'];
         $id = $data['movie_id'];
 
         $query = "UPDATE movie SET
@@ -77,7 +81,9 @@ $error = 'Error de Connexión número (' . $bbdd->connect_errno . ') ' . $bbdd->
         movie_year = '$year',
         movie_type = '$type',
         movie_leadactor = '$actor',
-        movie_director = '$director' 
+        movie_director = '$director',
+        movie_release = '$release',
+        movie_rating = '$rating'
         WHERE
         movie_id = $id";
         executeQuery($query);
@@ -107,7 +113,7 @@ $error = 'Error de Connexión número (' . $bbdd->connect_errno . ') ' . $bbdd->
     function form_movie($id){
         if ($_GET['action'] == 'edit'){
             $query = "SELECT
-                movie_name, movie_type, movie_year, movie_leadactor, movie_director
+                movie_name, movie_type, movie_year, movie_leadactor, movie_director, movie_release, movie_rating
             FROM
                 movie
             WHERE
@@ -121,6 +127,9 @@ $error = 'Error de Connexión número (' . $bbdd->connect_errno . ') ' . $bbdd->
             $year = $row['movie_year'];
             $actor = $row['movie_leadactor'];
             $director = $row['movie_director'];
+            $release = $row['movie_release'];
+            $rating = $row['movie_rating'];
+
 
         } else {
             $name = '';
@@ -128,11 +137,14 @@ $error = 'Error de Connexión número (' . $bbdd->connect_errno . ') ' . $bbdd->
             $year = '';
             $actor = '';
             $director = '';
+            $release = '';
+            $rating = '';
+
         }
         ?>
         <form action="<?php echo URL ?>" method="POST">
                                             <label for="movie_name">Movie name</label>
-                                            <input type="text" id="movie_name" name="movie_name" value="<?php echo $name ?>"required>
+                                            <input type="text" id="movie_name" name="movie_name" value="<?php echo $name ?>" required>
                                             </br>
                                             <label for="movie_type">Movie type</label>
                                             <select id="movie_type" name="movie_type" required>
@@ -213,6 +225,12 @@ $error = 'Error de Connexión número (' . $bbdd->connect_errno . ') ' . $bbdd->
                                                 ?>
                                             </select>
                                             </br>
+                                            <label for="movie_release">Release Date</label>
+                                            <input type="text" name="movie_release" value="<?php echo empty($release) ==  true ? '' : date('d-m-Y', $release) ?>" required />
+                                            </br>
+                                            <label for="movie_rating">Rating</label>
+                                            <input type="text" name="movie_rating" value="<?php echo $rating ?>" required  />
+                                            </br>
                                             <?php
                                             if ($_GET['action'] == 'edit'):
                                             ?>
@@ -280,4 +298,31 @@ $error = 'Error de Connexión número (' . $bbdd->connect_errno . ') ' . $bbdd->
     function errorFound(){
         echo "<p>Sorry, you cannot access to this page...</p>";  
     }
+
+//FUNCTIONS TO VALIDATING INPUTS
+
+    //This function delete spaces
+    function trimSpace($word){
+        return $word;
+
+    }
+    //This function delete html characters
+    function deleteHTML($word){
+        return $word;
+    }
+
+    //This function check is empty
+    function isEmpty($word){
+        return $word;
+    }
+
+    //This function format date
+    function createDate($date){
+        return $date;
+    }
+    //This function check rating
+    function checkRating($rating){
+        return $rating;
+    }
+
 ?>

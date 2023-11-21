@@ -33,41 +33,20 @@ case 'add':
         if (empty($movie_director)) {
             $error[] = urlencode('Please select a director.');
         }
-        $movie_release = isset($_POST['movie_release']) ? 
-            trim($_POST['movie_release']) : '';
-        if (!preg_match('|^\d{2}-\d{2}-\d{4}$|', $movie_release)) {
-            $error[] = urlencode('Please enter a date in dd-mm-yyyy format.');
-        } else {
-            list($day, $month, $year) = explode('-', $movie_release);
-            if (!checkdate($month, $day, $year)) {
-                $error[] = urlencode('Please enter a valid date.');
-            } else {
-                $movie_release = mktime(0, 0, 0, $month, $day, $year);
-            }
-        }
-        $movie_rating = isset($_POST['movie_rating']) ? 
-            trim($_POST['movie_rating']) : '';
-        if (!is_numeric($movie_rating)) {
-            $error[] = urlencode('Please enter a numeric rating.');
-        } else if ($movie_rating < 0 || $movie_rating > 10) {
-            $error[] = urlencode('Please enter a rating between 0 and 10.');
-        }
         if (empty($error)) {
             $query = 'INSERT INTO
                 movie
                     (movie_name, movie_year, movie_type, movie_leadactor,
-                    movie_director, movie_release, movie_rating)
+                    movie_director)
                 VALUES
                     ("' . $movie_name . '",
                      ' . $movie_year . ',
                      ' . $movie_type . ',
                      ' . $movie_leadactor . ',
-                     ' . $movie_director . ',
-                     ' . $movie_release . ',
-                     ' . $movie_rating . ')';
+                     ' . $movie_director . ')';
         } else {
-          header('Location:N6P104movie.php?action=add' .
-              '&error=' . join('<br/>', $error));
+          header('Location:M6P102movie.php?action=add' .
+              '&error=' . implode(" ", $error));
         }
         break;
     }
@@ -101,25 +80,6 @@ case 'edit':
         if (empty($movie_director)) {
             $error[] = urlencode('Please select a director.');
         }
-        $movie_release = isset($_POST['movie_release']) ? 
-            trim($_POST['movie_release']) : '';
-        if (!preg_match('|^\d{2}-\d{2}-\d{4}$|', $movie_release)) {
-            $error[] = urlencode('Please enter a date in dd-mm-yyyy format.');
-        } else {
-            list($day, $month, $year) = explode('-', $movie_release);
-            if (!checkdate($month, $day, $year)) {
-                $error[] = urlencode('Please enter a valid date.');
-            } else {
-                $movie_release = mktime(0, 0, 0, $month, $day, $year);
-            }
-        }
-        $movie_rating = isset($_POST['movie_rating']) ? 
-            trim($_POST['movie_rating']) : '';
-        if (!is_numeric($movie_rating)) {
-            $error[] = urlencode('Please enter a numeric rating.');
-        } else if ($movie_rating < 0 || $movie_rating > 10) {
-            $error[] = urlencode('Please enter a rating between 0 and 10.');
-        }
         if (empty($error)) {
             $query = 'UPDATE
                     movie
@@ -128,14 +88,12 @@ case 'edit':
                     movie_year = ' . $movie_year . ',
                     movie_type = ' . $movie_type . ',
                     movie_leadactor = ' . $movie_leadactor . ',
-                    movie_director = ' . $movie_director . ',
-                    movie_release = ' . $movie_release . ',
-                    movie_rating = ' . $movie_rating . '
+                    movie_director = ' . $movie_director . '
                 WHERE
                     movie_id = ' . $_POST['movie_id'];
         } else {
-          header('Location:N6P104movie.php?action=edit&id=' . $_POST['movie_id'] .
-              '&error=' . join('<br/>',($error)));
+          header('Location:movie.php?action=edit&id=' . $_POST['movie_id'] .
+              '&error=' . join($error, urlencode('<br/>')));
         }
         break;
     }
@@ -143,9 +101,8 @@ case 'edit':
 }
 
 if (isset($query)) {
-    $result = mysqli_query( $db, $query) or die(mysqli_error($db));
+    $result = mysqli_query($db, $query) or die(mysqli_error($db));
 }
-?>
 ?>
 <html>
  <head>
