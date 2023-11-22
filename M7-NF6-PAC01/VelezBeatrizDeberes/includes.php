@@ -29,6 +29,7 @@ $error = 'Error de Connexión número (' . $bbdd->connect_errno . ') ' . $bbdd->
 //FUNCTIONS TO ADD DATA
     //This function add a movie
     function  add_movie($data){
+   
         $name = $data['movie_name'];
         $type = $data['movie_type'];
         $year = $data['movie_year'];
@@ -301,28 +302,40 @@ $error = 'Error de Connexión número (' . $bbdd->connect_errno . ') ' . $bbdd->
 
 //FUNCTIONS TO VALIDATING INPUTS
 
-    //This function delete spaces
-    function trimSpace($word){
-        return $word;
-
-    }
-    //This function delete html characters
-    function deleteHTML($word){
-        return $word;
-    }
-
-    //This function check is empty
-    function isEmpty($word){
+    //This function delete spaces and html characters
+    function depurate($word){     
+        $word = trim($word);
+        $word = htmlspecialchars($word);
         return $word;
     }
 
     //This function format date
     function createDate($date){
-        return $date;
+
+        $date = depurate($date);
+
+        if (!preg_match('|^\d{2}-\d{2}-\d{4}$|', $date)) {
+            return array('error' => urlencode('Please enter a date in dd-mm-yyyy format.'));
+        } else {
+            list($day, $month, $year) = explode('-', $date);
+            if (!checkdate($month, $day, $year)) {
+                return array('error' => urlencode('Please enter a valid date.'));
+            } else {
+                return array('date' => mktime(0, 0, 0, $month, $day, $year), 'raw' => $date);
+            }
+        }    
     }
+
     //This function check rating
     function checkRating($rating){
-        return $rating;
+        $rating = depurate($rating);
+        if (!is_numeric($rating)) {
+            return array('error' => urlencode('Please enter a numeric rating.'));
+        } else if ($rating < 0 || $rating > 10) {
+            return array('error' => urlencode('Please enter a rating between 0 and 10.'));
+        } else {
+            return array('rating' => $rating);
+        }
     }
 
 ?>
