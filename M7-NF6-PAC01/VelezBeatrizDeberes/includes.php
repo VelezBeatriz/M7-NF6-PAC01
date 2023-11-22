@@ -53,8 +53,10 @@ $error = 'Error de Connexión número (' . $bbdd->connect_errno . ') ' . $bbdd->
     //This function add a person
     function  add_people($data){
         $name = $data['people_name'];
-        $actor = $data['people_actor'];
-        $director = $data['people_director'];
+        $actor = ($data['people_actor'] == 'Yes') ? 1 : 0;
+        $director = ($data['people_director'] == 'Yes') ? 1 : 0;
+
+
         $query = "INSERT INTO
         people
             (people_fullname, people_isactor, people_isdirector)
@@ -93,8 +95,8 @@ $error = 'Error de Connexión número (' . $bbdd->connect_errno . ') ' . $bbdd->
     //This function edit a person
     function edit_people($data){
         $name = $data['people_name'];
-        $actor = $data['people_actor'];
-        $director = $data['people_director'];
+        $actor = ($data['people_actor'] == 'Yes') ? 1 : 0;
+        $director = ($data['people_director'] == 'Yes') ? 1 : 0;
         $id = $data['people_id'];
 
         $query = "UPDATE people SET
@@ -272,14 +274,14 @@ $error = 'Error de Connexión número (' . $bbdd->connect_errno . ') ' . $bbdd->
             </br>
             <label for="people_actor">Actor:</label>
             <select name="people_actor" id="people_actor">
-                <option value="0" <?php echo $is_actor == '0' ? 'selected' : ''?>>No</option>
-                <option value="1" <?php echo $is_actor == '1' ? 'selected' : ''?>>Yes</option>
+                <option value="No" <?php echo $is_actor == '0' ? 'selected' : ''?>>No</option>
+                <option value="Yes" <?php echo $is_actor == '1' ? 'selected' : ''?>>Yes</option>
             </select>
             </br>
             <label for="people_director">Director:</label>
             <select name="people_director" id="people_director">
-            <option value="0" <?php echo $is_director == '0' ? 'selected' : ''?>>No</option>
-            <option value="1" <?php echo $is_director == '1' ? 'selected' : ''?>>Yes</option>
+            <option value="Yes" <?php echo $is_director == '0' ? 'selected' : ''?>>No</option>
+            <option value="No" <?php echo $is_director == '1' ? 'selected' : ''?>>Yes</option>
             </select>
             </br>
             <?php

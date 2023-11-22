@@ -28,21 +28,11 @@
             text-decoration: none;
         }
 
-        #error { 
-            background-color: #600;
-            border: 1px solid #FF0;
-            color: #FFF;
-            text-align: center;
-            margin: 10px;
-            padding: 10px; 
-        }
-
+   
     </style>
 </head>
 
 <body>
-    <?php if(isset($_GET['error'])) { echo "<div id='error'>" . $_GET['error'] . "</div>";} ?>
-
     <h1>Administration panel</h1>
     <!-- CONNEXION BBDD -->
     <?php

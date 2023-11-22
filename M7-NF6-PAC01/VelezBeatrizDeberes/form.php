@@ -83,7 +83,7 @@ if(isset($_POST['enviar_movie'])):
                         echo '<p>¡Película añadida exitosamente!</p>';
                     }
         } else {
-            header('Location:index.php?error=' . join('<br/>', $error));
+            header('Location:' .URL . '&error=' . join('<br/>', $error));
         }
 
     } else {
@@ -175,7 +175,7 @@ if(isset($_POST['enviar_movie'])):
                 }
 
         } else {
-            header('Location:index.php?error=' . join('<br/>', $error));
+            header('Location:' . URL . '&error=' . join('<br/>', $error));
         }
     
 
@@ -197,22 +197,20 @@ if(isset($_POST['enviar_people'])):
 
         $people_actor = $_POST['people_actor'];
         $people_actor = depurate($people_actor);
-        if (empty($people_actor)) {
+        if ($people_actor !== 'Yes' && $people_actor !== 'No') {
             $error[] = urlencode('Please select is or is not actor.');
-        } else {
-            if($people_actor != '1' && $people_actor != '0'){
-            $error[] = urlencode('Please select is or is not actor.');
-            }
         }
-
+        if(empty($people_actor)){
+            $error[] = urlencode('Please select is or is not actor.');
+        }
+        
         $people_director = $_POST['people_director'];
         $people_director = depurate($people_director);
-        if (empty($people_director)) {
+        if ($people_director !== 'Yes' && $people_director !== 'No') {
             $error[] = urlencode('Please select is or is not director.');
-        } else {
-            if($people_director != '1' && $people_director != '0'){
-                $error[] = urlencode('Please select is or is not director.');
-            }
+        }
+        if(empty($people_director)){
+            $error[] = urlencode('Please select is or is not director.');
         }
 
         //ERRORS OR ADD
@@ -229,7 +227,7 @@ if(isset($_POST['enviar_people'])):
                     echo '<p>¡Persona añadida exitosamente!</p>';
                 }
         } else {
-            header('Location:index.php?error=' . join('<br/>', $error));
+            header('Location:' .URL . '&error=' . join('<br/>', $error));
         }
 
             
@@ -247,24 +245,24 @@ if(isset($_POST['enviar_people'])):
 
         $people_actor = $_POST['people_actor'];
         $people_actor = depurate($people_actor);
-        if (empty($people_actor)) {
+   
+        if ($people_actor !== 'Yes' && $people_actor !== 'No') {
             $error[] = urlencode('Please select is or is not actor.');
-        } else {
-            if($people_actor != '1' && $people_actor != '0'){
+        }
+        if(empty($people_actor)){
             $error[] = urlencode('Please select is or is not actor.');
-            }
         }
 
         $people_director = $_POST['people_director'];
         $people_director = depurate($people_director);
-        if (empty($people_director)) {
+        if(empty($people_director)){
             $error[] = urlencode('Please select is or is not director.');
-        } else {
-            if($people_director != '1' && $people_director != '0'){
-                $error[] = urlencode('Please select is or is not director.');
-            }
         }
-        //ERRORS OR ADD
+        if ($people_director !== 'Yes' && $people_director !== 'No') {
+            $error[] = urlencode('Please select is or is not director.');
+        }
+
+        //ERRORS OR EDIT
         if (empty($error)) {
 
             $allData = [                      
@@ -277,7 +275,7 @@ if(isset($_POST['enviar_people'])):
                     echo '<p>¡Persona editada exitosamente!</p>';
                 }
         } else {
-            header('Location:index.php?error=' . join('<br/>', $error));
+            header('Location:' .URL . '&error=' . join('<br/>', $error));
         }
             
     }
@@ -302,8 +300,21 @@ endif;
     endif;
     ?>
     <title>Page - <?php echo $action?></title>
+    <style>
+             #error { 
+            background-color: #600;
+            border: 1px solid #FF0;
+            color: #FFF;
+            text-align: center;
+            margin: 10px;
+            padding: 10px; 
+        }
+
+    </style>
 </head>
 <body>
+<?php if(isset($_GET['error'])) { echo "<div id='error'>" . $_GET['error'] . "</div>";} ?>
+
     <?php
     //CHECK ACTION
     if(isset($_GET['action'])):
